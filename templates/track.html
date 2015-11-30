@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <form action="{{ url_for( 'track_search' ) }}" method=post class=track-create>
+                <input type=text size=30 name=query>
+                <button type=submit value=Search class="btn btn-default">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {% if tracks %}
+
+       
+         
+        <table class="table table-condensed">    
+            {% for track in tracks %}
+                 <tbody>
+                     <tr>
+                        {% if track.id %}
+                        <td>
+                            <a href="{{ url_for( 'track_retrieve', id=track.id ) }}" class="btn btn-default">
+                                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                        {% else %}
+                        <td>
+                            <a href="{{ url_for( 'track_add', deezer_id=track.deezer_id ) }}" class="btn btn-default">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                        {% endif %}
+                        <td>
+                            <img src="{{ track.picture|safe }}" width=40 height=40/>
+                        </td>
+                        <td>
+                            {{ track.title|safe }}
+                        </td>
+                        <td>
+                            {{ track.artist|safe }}
+                        </td>
+                        <td>
+                            <a onclick="player.load('{{ track.mp3|safe }}')"class="btn btn-default">
+                                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                     </tr>
+                 </tbody>
+            {% endfor %}
+        </table>
+    </div>
+        
+    {% elif track %}
+    
+    <div class="row">
+    
+        <table class="row table table-condensed" border=0>
+            <tr>
+                <th colspan="3" class="text-right">
+                    <a href="{{ url_for( 'track_retrieve_all' ) }}">back</a> | <a href="{{ url_for( 'track_update', id=track.id ) }}">update</a> | <a href="{{ url_for( 'track_delete', id=track.id ) }}">delete</a>
+                </th>
+            </tr>
+            <tr>
+                <th class="text-right">title</th>
+                <td>{{ track.title|safe }}</td>
+                <td rowspan="3" class="text-center">
+                    <img src="{{ track.picture|safe }}"/>
+                </td>
+            </tr>            
+            <tr>
+                <th class="text-right">artist</th>
+                <td>{{ track.artist|safe }}</td>
+            </tr>            
+            <tr>
+                <th class="text-right">album</th>
+                <td>{{ track.album|safe }}</td>
+            </tr>            
+            <tr>
+                <th class="text-right">genre</th>
+                <td>{{ track.genre|safe }}</td>
+                <td class="text-center">
+                    <a href="javascript:void(0);" onclick="$('audio').src='{{track.mp3}}';audio.play();" class="btn btn-default">
+                        <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <pre style="font-size:80%">{{ track.indented_json|safe }}</pre>
+                </td>
+            </tr>
+        </table>
+    </div>
+          
+    {% else %}
+    
+        ...
+        
+    {% endif %}
+    
+</div>    
+{% endblock %}

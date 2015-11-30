@@ -1,0 +1,36 @@
+
+<div id="player-container">
+    
+    <!-- action -->
+    
+    <a id="player-play" class="btn btn-default">
+        <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+    </a>
+    <a id="player-pause" class="btn btn-default">
+        <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+    </a>
+
+    <!-- volume -->
+
+    <a id="player-down" class="btn btn-default">
+        <span class="glyphicon glyphicon-volume-down" aria-hidden="true"></span>
+    </a>
+    <a id="player-mute" class="btn btn-default">
+        <span class="glyphicon glyphicon-volume-off" aria-hidden="true"></span>
+    </a>
+    <a id="player-up" class="btn btn-default">
+        <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
+    </a>
+
+    <!-- audio -->
+
+    <audio id="player-audio"><audio>
+
+    <!-- javascript -->
+    
+    <script src="{{ url_for( 'static', filename='js/player.js' ) }}"></script>
+    <script>
+        var player = new Player();
+    </script>
+    
+</div>    
