@@ -34,7 +34,7 @@ def before_request():
 
 
 @app.teardown_request
-def teardown_request():
+def teardown_request(exception):
     app.db.commit()
     app.db.disconnect()
 
@@ -100,47 +100,35 @@ def track_retrieve_all():
 
 @app.route('/track/search', methods=['POST'])
 def track_search():
-    items = track.search(request.form['query'])
+    items = track.search(query=request.form['query'])
     return render_template('track.html', tracks=items)
 
 
-@app.route('/track/<id>')
-def track_retrieve(id):
-    print id
-    item = track.retrieve(id)
-    print item
+@app.route('/track/<oid>')
+def track_retrieve(oid):
+    item = track.retrieve(oid)
     return render_template('track.html', track=item)
 
 
-@app.route('/track/add/<deezer_id>', methods=['GET'])
-def track_add(deezer_id):
+@app.route('/track/add/<oid>', methods=['GET'])
+def track_add(oid):
     # if not session.get( 'logged_in' ):
     #    abort( 401 )
-    item = track.create(deezer_id)
+    item = track.create(oid)
     flash(SUCCESS_TRACK_CREATE)
-    return redirect(url_for('track_retrieve', id=item.id))
+    return render_template('track.html', track=item)
 
 
 @app.route('/track/update/<oid>', methods=['GET'])
 def track_update(oid):
-    item = track.delete(oid)
-    item = track.create(item.deezer_id)
+    item = track.update(oid)
     flash(SUCCESS_TRACK_UPDATE)
-    return redirect(url_for('track_retrieve', id=item.id))
+    return render_template('track.html', track=item)
 
 
-@app.route('/track/create', methods=['POST'])
-def track_create():
-    # if not session.get( 'logged_in' ):
-    #    abort( 401 )
-    item = track.create(request.form['deezer_id'])
-    flash(SUCCESS_TRACK_CREATE)
-    return redirect(url_for('track_retrieve', id=item.id))
-
-
-@app.route('/track/delete/<id>')
-def track_delete(id):
-    item = track.delete(id)
+@app.route('/track/delete/<oid>')
+def track_delete(oid):
+    track.delete(oid)
     flash(SUCCESS_TRACK_DELETE)
     return redirect(url_for('track_retrieve_all'))
 

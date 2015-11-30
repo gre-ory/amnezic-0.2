@@ -1,6 +1,7 @@
 # ##################################################
 # import
 
+import os
 import sqlite3
 import tempfile
 import lib.util as util
@@ -28,6 +29,9 @@ class Database:
         else:
             self.db_fd, self.db_file = tempfile.mkstemp()
         print 'db [%s]' % self.db_file
+        if not os.path.exists(os.path.dirname(self.db_file)):
+            print ' (+) dir %s' % os.path.dirname(self.db_file)
+            os.makedirs(os.path.dirname(self.db_file))
         self.connection = None
         self.cursor = None
 

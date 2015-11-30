@@ -21,15 +21,15 @@
             {% for track in tracks %}
                  <tbody>
                      <tr>
-                        {% if track.id %}
+                        {% if track.loaded %}
                         <td>
-                            <a href="{{ url_for( 'track_retrieve', id=track.id ) }}" class="btn btn-default">
+                            <a href="{{ url_for( 'track_retrieve', oid=track.oid ) }}" class="btn btn-default">
                                 <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                             </a>
                         </td>
                         {% else %}
                         <td>
-                            <a href="{{ url_for( 'track_add', deezer_id=track.deezer_id ) }}" class="btn btn-default">
+                            <a href="{{ url_for( 'track_add', oid=track.oid ) }}" class="btn btn-default">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                             </a>
                         </td>
@@ -61,7 +61,7 @@
         <table class="row table table-condensed" border=0>
             <tr>
                 <th colspan="3" class="text-right">
-                    <a href="{{ url_for( 'track_retrieve_all' ) }}">back</a> | <a href="{{ url_for( 'track_update', id=track.id ) }}">update</a> | <a href="{{ url_for( 'track_delete', id=track.id ) }}">delete</a>
+                    <a href="{{ url_for( 'track_retrieve_all' ) }}">back</a> | <a href="{{ url_for( 'track_update', oid=track.oid ) }}">update</a> | <a href="{{ url_for( 'track_delete', oid=track.oid ) }}">delete</a>
                 </th>
             </tr>
             <tr>

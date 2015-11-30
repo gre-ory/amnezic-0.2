@@ -35,10 +35,8 @@ def create(oid):
     obj = source.track(oid)
     if obj is None:
         util.throw('track %s not found!' % oid)
-    print oid
-    print obj.json
-    sql.insert(db.track, obj)
-    return obj
+    obj.loaded = True
+    return sql.insert(db.track, obj)
 
 
 def update(oid):
@@ -46,8 +44,8 @@ def update(oid):
     obj = source.track(oid)
     if obj is None:
         util.throw('track %s not found!' % oid)
-    sql.update(db.track, obj)
-    return obj
+    obj.loaded = True
+    return sql.update(db.track, obj)
 
 
 def delete(oid):

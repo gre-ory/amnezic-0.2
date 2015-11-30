@@ -152,6 +152,37 @@ class AmnezicTestCase(unittest.TestCase):
         rv = self.login(password='invalid')
         assert amnezic.ERROR_INVALID_LOGIN in rv.data
 
+    # ##################################################
+    # app
+
+    def test_200_flow_track(self):
+        print ' ---------- test_200_flow_track '
+        query = 'toto'
+        items = track.retrieve_all()
+        assert len(items) == 0
+        items = track.search(query=query)
+        assert len(items) != 0
+        oid = 549979
+        item = track.search(oid=oid)
+        assert item.oid == oid
+        item = track.create(oid=oid)
+        assert item.oid == oid
+        items = track.retrieve_all()
+        assert len(items) == 1
+        item = track.retrieve(oid=oid)
+        assert item.oid == oid
+        item = track.update(oid=oid)
+        assert item.oid == oid
+        assert item.title == 'Hold the Line'
+        assert item.album == 'Les Indispensables'
+        assert item.artist == 'Toto'
+        assert item.genre == 'Pop'
+        assert item.mp3 is not None
+        assert item.picture is not None
+        item = track.delete(oid=oid)
+        assert item.oid == oid
+        items = track.retrieve_all()
+        assert len(items) == 0
 
 if __name__ == '__main__':
     unittest.main()
