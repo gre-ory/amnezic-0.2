@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-12">
             <form action="{{ url_for( 'track_search' ) }}" method=post class=track-create>
-                <input type=text size=30 name=query>
+                <input type=text size=30 name=query value="{{ query }}">
                 <button type=submit value=Search class="btn btn-default">
                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                 </button>
@@ -15,8 +15,6 @@
 
     {% if tracks %}
 
-       
-         
         <table class="table table-condensed">    
             {% for track in tracks %}
                  <tbody>
@@ -29,19 +27,21 @@
                         </td>
                         {% else %}
                         <td>
-                            <a href="{{ url_for( 'track_add', oid=track.oid ) }}" class="btn btn-default">
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            <a href="{{ url_for( 'track_view', oid=track.oid ) }}" class="btn btn-default">
+                                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                             </a>
                         </td>
                         {% endif %}
                         <td>
-                            <img src="{{ track.picture|safe }}" width=40 height=40/>
-                        </td>
-                        <td>
                             {{ track.title|safe }}
                         </td>
                         <td>
-                            {{ track.artist|safe }}
+                            <img src="{{ track.album.picture|safe }}" width=40 height=40/>
+                            {{ track.album.name|safe }}
+                        </td>
+                        <td>
+                            <img src="{{ track.artist.picture|safe }}" width=40 height=40/>
+                            {{ track.artist.name|safe }}
                         </td>
                         <td>
                             <a onclick="player.load('{{ track.mp3|safe }}')"class="btn btn-default">
@@ -68,20 +68,21 @@
                 <th class="text-right">title</th>
                 <td>{{ track.title|safe }}</td>
                 <td rowspan="3" class="text-center">
-                    <img src="{{ track.picture|safe }}"/>
+                    <img src="{{ track.artist.picture|safe }}"/>
+                    <img src="{{ track.album.picture|safe }}"/>
                 </td>
             </tr>            
             <tr>
                 <th class="text-right">artist</th>
-                <td>{{ track.artist|safe }}</td>
+                <td>{{ track.artist.name|safe }}</td>
             </tr>            
             <tr>
                 <th class="text-right">album</th>
-                <td>{{ track.album|safe }}</td>
+                <td>{{ track.album.name|safe }}</td>
             </tr>            
             <tr>
                 <th class="text-right">genre</th>
-                <td>{{ track.genre|safe }}</td>
+                <td>{{ track.genres[0]|safe }}</td>
                 <td class="text-center">
                     <a href="javascript:void(0);" onclick="$('audio').src='{{track.mp3}}';audio.play();" class="btn btn-default">
                         <span class="glyphicon glyphicon-play" aria-hidden="true"></span>

@@ -1,52 +1,54 @@
 # ##################################################
 # import
 
-import lib.util as util
-import lib.sql as sql
-import lib.db as db
 
-# ##################################################
-# source
+import lib.util
+import lib.sql
+import lib.db
 
-source = None
+import lib.plugin
 
 
 # ##################################################
 # json
 
-def search(oid=None, query=None):
-    source is not None or util.throw('missing track source!')
-    if oid is not None:
-        return source.track(oid)
-    else:
-        return source.search(query)
+
+def search(query=None):
+    lib.plugin.source is not None or lib.util.throw('missing track source!')
+    query is not None or lib.util.throw('missing query!')
+    return lib.plugin.source.search(query)
+
+
+def search_by_oid(oid=None):
+    lib.plugin.source is not None or lib.util.throw('missing track source!')
+    oid is not None or lib.util.throw('missing track oid!')
+    return lib.plugin.source.track(oid)
 
 
 def retrieve_all():
-    return sql.retrieve_all(db.track)
-
-
-def retrieve(oid):
-    return sql.retrieve(db.track, oid)
+    return lib.sql.retrieve_all(lib.db.track)
 
 
 def create(oid):
-    source is not None or util.throw('missing track source!')
-    obj = source.track(oid)
-    if obj is None:
-        util.throw('track %s not found!' % oid)
-    obj.loaded = True
-    return sql.insert(db.track, obj)
+    return update(oid)
+
+
+def retrieve(oid):
+    oid is not None or lib.util.throw('missing oid!')
+    return lib.sql.retrieve(lib.db.track, oid)
 
 
 def update(oid):
-    source is not None or util.throw('missing track source!')
-    obj = source.track(oid)
-    if obj is None:
-        util.throw('track %s not found!' % oid)
+    lib.plugin.source is not None or lib.util.throw('missing track source!')
+    oid is not None or lib.util.throw('missing oid!')
+    obj = lib.plugin.source.track(oid)
+    obj is not None or lib.util.throw('track %s not found!' % oid)
     obj.loaded = True
-    return sql.update(db.track, obj)
+    return lib.sql.upsert(lib.db.track, obj)
 
 
 def delete(oid):
-    return sql.delete(db.track, oid)
+    return lib.sql.delete(lib.db.track, oid)
+
+
+
